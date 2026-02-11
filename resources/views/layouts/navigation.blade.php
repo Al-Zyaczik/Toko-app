@@ -97,4 +97,12 @@
             </div>
         </div>
     </div>
+
+    @if(Auth::check() && Auth::user()->role === 'pelanggan')
+        <a href="{{ route('pelanggan.cart.index') }}"
+        class="text-gray-700 hover:text-black font-semibold">
+            Keranjang ({{ count(session('cart', [])) }})
+        </a>
+    @endif
+
 </nav>

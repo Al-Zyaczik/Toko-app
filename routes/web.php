@@ -8,6 +8,7 @@ use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\CartController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -44,6 +45,12 @@ Route::middleware('auth')->group(function () {
         });
     });
 
+    Route::middleware(['auth', 'role:karyawan'])->group(function () {
+        Route::get('/kasir', [PenjualanController::class, 'kasir'])->name('kasir.index');
+        Route::post('/kasir/konfirmasi/{id}', [PenjualanController::class, 'konfirmasiPesanan'])->name('kasir.konfirmasi');
+        // ... route store pos lainnya
+    });
+
     Route::middleware(['role:pelanggan'])->group(function () {
 
         Route::get('/pelanggan/home', [PelangganController::class, 'home'])
@@ -60,6 +67,24 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/pelanggan/riwayat', [RiwayatController::class, 'index'])->name('pelanggan.riwayat');
         Route::get('/pelanggan/riwayat/{id}', [RiwayatController::class, 'show'])->name('pelanggan.riwayat.show');
+
+        Route::get('/pelanggan/cart', [CartController::class, 'index'])
+         ->name('pelanggan.cart.index');
+
+        Route::post('/pelanggan/cart/add', [CartController::class, 'add'])
+            ->name('pelanggan.cart.add');
+
+        Route::post('/pelanggan/cart/update', [CartController::class, 'update'])
+            ->name('pelanggan.cart.update');
+
+        Route::post('/pelanggan/cart/delete', [CartController::class, 'delete'])
+            ->name('pelanggan.cart.delete');
+
+        Route::get('/pelanggan/checkout', [CartController::class, 'checkoutPage'])
+         ->name('pelanggan.checkout');
+
+        Route::post('/pelanggan/checkout', [CartController::class, 'checkoutProcess'])
+            ->name('pelanggan.checkout.process');
     });
 
 });

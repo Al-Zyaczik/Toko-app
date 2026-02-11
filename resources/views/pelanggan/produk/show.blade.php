@@ -23,20 +23,23 @@
                 Stok tersedia: <strong>{{ $produk->stok }}</strong>
             </p>
 
-            {{-- BUTTON ADD TO CART --}}
-            <form method="POST" action="#" class="space-y-4">
+            {{-- Ganti form lama dengan ini --}}
+            <form method="POST" action="{{ route('pelanggan.cart.add') }}" class="space-y-4">
                 @csrf
+                
+                {{-- 1. Tambahkan Hidden Input untuk ID Produk --}}
+                <input type="hidden" name="produk_id" value="{{ $produk->id }}">
 
                 <div>
-                    <label class="font-semibold">Jumlah:</label>
-                    <input type="number" name="jumlah" value="1" min="1"
-                           class="w-24 p-2 border rounded-lg ml-2">
+                    <label class="font-semibold text-gray-700">Jumlah:</label>
+                    <input type="number" name="jumlah" value="1" min="1" max="{{ $produk->stok }}"
+                        class="w-24 p-2 border border-gray-300 rounded-lg ml-2 focus:ring-2 focus:ring-blue-500">
                 </div>
 
-                <button
-                    type="button"
-                    class="px-6 py-3 bg-blue-600 text-white rounded-xl text-lg hover:bg-blue-700 shadow">
-                    Tambah ke Keranjang
+                {{-- 2. Pastikan type-nya adalah "submit" --}}
+                <button type="submit"
+                        class="w-full md:w-auto px-8 py-3 bg-blue-600 text-white rounded-xl text-lg font-bold hover:bg-blue-700 shadow-lg transition-transform active:scale-95">
+                    🛒 Tambah ke Keranjang
                 </button>
             </form>
 
